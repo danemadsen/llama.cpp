@@ -65,8 +65,13 @@ if (NOT GGML_SHARED_LIB)
     endif()
 
     if (GGML_VULKAN)
-        find_package(Vulkan REQUIRED)
-        list(APPEND GGML_VULKAN_INTERFACE_LINK_LIBRARIES Vulkan::Vulkan)
+        if (ANDROID)
+            # Android NDK includes Vulkan, no find_package needed
+            list(APPEND GGML_VULKAN_INTERFACE_LINK_LIBRARIES vulkan)
+        else()
+            find_package(Vulkan REQUIRED)
+            list(APPEND GGML_VULKAN_INTERFACE_LINK_LIBRARIES Vulkan::Vulkan)
+        endif()
     endif()
 
     if (GGML_HIP)
